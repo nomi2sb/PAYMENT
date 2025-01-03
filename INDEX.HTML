@@ -119,38 +119,43 @@
     </div>
     <script>
         document.getElementById('confirmBtn').addEventListener('click', function () {
-    const form = document.getElementById('paymentForm');
-    const amount = parseInt(form.amount.value, 10);
-    const transactionId = form.transactionId.value.trim();
+            const form = document.getElementById('paymentForm');
+            const username = form.username.value.trim();
+            const accountName = form.accountName.value.trim();
+            const accountNumber = form.accountNumber.value.trim();
+            const amount = form.amount.value.trim();
+            const transactionId = form.transactionId.value.trim();
 
-    // Validate amount
-    if (amount < 100) {
-        alert("Please enter an amount of Rs. 100 or more.");
-        return;
-    }
+            // Validate amount
+            if (parseInt(amount, 10) < 100) {
+                alert("Please enter an amount of Rs. 100 or more.");
+                return;
+            }
 
-    // Validate transaction ID
-    if (transactionId.length !== 11 || isNaN(transactionId)) {
-        alert("Please enter a valid 11-digit Transaction ID.");
-        return;
-    }
+            // Validate transaction ID
+            if (transactionId.length !== 11 || isNaN(transactionId)) {
+                alert("Please enter a valid 11-digit Transaction ID.");
+                return;
+            }
 
-    // If valid, prepare WhatsApp message and redirect
-    const data = new FormData(form);
-    const details = Array.from(data.entries())
-        .map(([key, value]) => `*${key.toUpperCase()}*: ${value}`)
-        .join('%0A');
+            // Create WhatsApp message
+            const details = `
+                *Username*: ${username}
+                *Account Name*: ${accountName}
+                *Account Number*: ${accountNumber}
+                *Amount*: Rs. ${amount}
+                *Transaction ID*: ${transactionId}
+            `.trim().replace(/\n/g, '%0A'); // Replace line breaks with %0A for WhatsApp
 
-    const whatsappLink = `https://wa.me/+923486006599?text=${details}`;
-    window.location.href = whatsappLink;
+            const whatsappLink = `https://wa.me/+923486006599?text=${details}`;
+            
+            // Redirect to WhatsApp
+            window.location.href = whatsappLink;
 
-    setTimeout(() => {
-        alert('Your payment will be verified and added to your account shortly.');
-    }, 1000);
-});
-
+            setTimeout(() => {
+                alert('Your payment will be verified and added to your account shortly.');
+            }, 1000);
+        });
     </script>
-
-    
 </body>
 </html>
